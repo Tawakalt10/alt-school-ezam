@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
 const NotFound = () => {
@@ -17,7 +17,7 @@ const NotFound = () => {
             {location.pathname}
           </code>
         </p>
-        <p className="text-gray-600 mb-8">doesn't exist or was removed.</p>
+        <p className="text-gray-600 mb-8">does not exist or was removed.</p>
         <div className="space-x-4">
           <Link
             to="/"
