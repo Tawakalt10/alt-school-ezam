@@ -1,3 +1,5 @@
+// src/App.tsx
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import TodoList from "./pages/TodoList";
@@ -6,7 +8,7 @@ import NotFound from "./pages/NotFound";
 import ErrorTest from "./pages/ErrorTest";
 import ErrorBoundary from "./components/ErrorBoundary";
 
-const App = () => {
+const App: React.FC = () => {
   return (
     <ErrorBoundary>
       <Router>

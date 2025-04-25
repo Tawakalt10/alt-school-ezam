@@ -1,11 +1,27 @@
-// import React from "react";
+// src/pages/TodoDetail.tsx
+import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTodo } from "../hooks/useTodo";
 
-const TodoDetail = () => {
-  const { id } = useParams();
+// Define the Todo type (extended with userId for this context)
+interface Todo {
+  id: number;
+  title: string;
+  completed: boolean;
+  userId: number;
+}
+
+// Define the return type of the useTodo hook
+interface UseTodoResult {
+  todo: Todo | null;
+  loading: boolean;
+  error: string | null;
+}
+
+const TodoDetail: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { todo, loading, error } = useTodo(id);
+  const { todo, loading, error } = useTodo(id) as UseTodoResult;
 
   if (loading) {
     return (

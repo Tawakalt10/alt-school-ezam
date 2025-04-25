@@ -1,6 +1,14 @@
+// src/components/TodoFilters.tsx
 import React from "react";
 
-const TodoFilters = ({
+interface TodoFiltersProps {
+  searchTerm: string;
+  onSearchChange: (term: string) => void;
+  filterStatus: "all" | "active" | "completed";
+  onFilterChange: (status: "all" | "active" | "completed") => void;
+}
+
+const TodoFilters: React.FC<TodoFiltersProps> = ({
   searchTerm,
   onSearchChange,
   filterStatus,
@@ -18,7 +26,9 @@ const TodoFilters = ({
             id="search"
             placeholder="Search todos..."
             value={searchTerm}
-            onChange={(e) => onSearchChange(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              onSearchChange(e.target.value)
+            }
             className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
@@ -34,7 +44,9 @@ const TodoFilters = ({
         <select
           id="status-filter"
           value={filterStatus}
-          onChange={(e) => onFilterChange(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+            onFilterChange(e.target.value as "all" | "active" | "completed")
+          }
           className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
         >
           <option value="all">All</option>
