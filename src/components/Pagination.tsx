@@ -1,6 +1,17 @@
-// import React from "react";
+// src/components/Pagination.tsx
+import React from "react";
 
-const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}
+
+const Pagination: React.FC<PaginationProps> = ({
+  currentPage,
+  totalPages,
+  onPageChange,
+}) => {
   return (
     <div
       className="flex justify-center space-x-2 mt-4"

@@ -1,7 +1,8 @@
-// import React from "react";
+// src/pages/NotFound.tsx
+import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
-const NotFound = () => {
+const NotFound: React.FC = () => {
   const location = useLocation();
 
   return (

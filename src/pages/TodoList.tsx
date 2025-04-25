@@ -1,3 +1,4 @@
+// src/pages/TodoList.tsx
 import React, { useState } from "react";
 import { useTodos } from "../hooks/useTodos";
 import TodoItem from "../components/TodoItem";
@@ -5,44 +6,75 @@ import Pagination from "../components/Pagination";
 import TodoFilters from "../components/TodoFilters";
 import Modal from "../components/Modal";
 import TodoForm from "../components/TodoForm";
+import { Todo } from "../types/todo";
 
-const TodoList = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterStatus, setFilterStatus] = useState("all");
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editingTodo, setEditingTodo] = useState(null);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [deletingTodoId, setDeletingTodoId] = useState(null);
+// Define the return type of the useTodos hook
+interface UseTodosResult {
+  todos: Todo[];
+  loading: boolean;
+  error: string | null;
+  totalPages: number;
+  addTodo: (todoData: Omit<Todo, "id" | "userId">) => Promise<boolean>;
+  updateTodo: (id: number, todoData: Partial<Todo>) => Promise<boolean>;
+  deleteTodo: (id: number) => Promise<boolean>;
+}
+
+const TodoList: React.FC = () => {
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [filterStatus, setFilterStatus] = useState<"all" | "active" | "completed">("all");
+  const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+  const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+  const [deletingTodoId, setDeletingTodoId] = useState<number | null>(null);
 
   const { todos, loading, error, totalPages, addTodo, updateTodo, deleteTodo } =
-    useTodos(currentPage, searchTerm, filterStatus);
+    useTodos(currentPage, searchTerm, filterStatus) as UseTodosResult;
 
-  const handleAdd = async (todoData) => {
-    await addTodo(todoData);
-    setIsAddModalOpen(false);
+  const handleAdd = async (todoData: Omit<Todo, "id" | "userId">) => {
+    const success = await addTodo(todoData);
+    if (success) {
+      setIsAddModalOpen(false);
+    } else {
+      console.error("Failed to add todo");
+      // Optionally show an error message to the user
+    }
   };
 
-  const handleEdit = (todo) => {
+  const handleEdit = (todo: Todo) => {
     setEditingTodo(todo);
     setIsEditModalOpen(true);
   };
 
-  const handleUpdate = async (todoData) => {
-    await updateTodo(editingTodo.id, todoData);
-    setIsEditModalOpen(false);
-    setEditingTodo(null);
+  const handleUpdate = async (todoData: Omit<Todo, "id" | "userId">) => {
+    const success = await updateTodo(editingTodo!.id, todoData);
+    if (success) {
+      setIsEditModalOpen(false);
+      setEditingTodo(null);
+    } else {
+      console.error("Failed to update todo");
+      // Optionally show an error message to the user
+    }
   };
 
   const handleDelete = async () => {
-    await deleteTodo(deletingTodoId);
-    setIsDeleteModalOpen(false);
-    setDeletingTodoId(null);
+    const success = await deleteTodo(deletingTodoId!);
+    if (success) {
+      setIsDeleteModalOpen(false);
+      setDeletingTodoId(null);
+    } else {
+      console.error("Failed to delete todo");
+      // Optionally show an error message to the user
+    }
   };
 
-  const handleToggleComplete = async (id, completed) => {
-    await updateTodo(id, { completed });
+  const handleToggleComplete = async (id: number, completed: boolean) => {
+    const success = await updateTodo(id, { completed });
+    if (!success) {
+      console.error("Failed to toggle todo completion");
+      // Optionally show an error message to the user
+    }
   };
 
   if (loading) {
@@ -78,7 +110,7 @@ const TodoList = () => {
             key={todo.id}
             todo={todo}
             onEdit={handleEdit}
-            onDelete={(id) => {
+            onDelete={(id: number) => {
               setDeletingTodoId(id);
               setIsDeleteModalOpen(true);
             }}

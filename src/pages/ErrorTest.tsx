@@ -1,7 +1,9 @@
-import  { useState } from "react";
+// src/pages/ErrorTest.tsx
+import React from "react";
+import { useState } from "react";
 
-const ErrorTest = () => {
-  const [throwError, setThrowError] = useState(false);
+const ErrorTest: React.FC = () => {
+  const [throwError, setThrowError] = useState<boolean>(false);
 
   if (throwError) {
     throw new Error("This is a test error from ErrorTest component");

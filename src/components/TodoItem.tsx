@@ -1,7 +1,26 @@
+// src/components/TodoItem.tsx
 import React from "react";
 import { Link } from "react-router-dom";
 
-const TodoItem = ({ todo, onEdit, onDelete, onToggleComplete }) => {
+interface Todo {
+  id: number;
+  title: string;
+  completed: boolean;
+}
+
+interface TodoItemProps {
+  todo: Todo;
+  onEdit: (todo: Todo) => void;
+  onDelete: (id: number) => void;
+  onToggleComplete: (id: number, completed: boolean) => void;
+}
+
+const TodoItem: React.FC<TodoItemProps> = ({
+  todo,
+  onEdit,
+  onDelete,
+  onToggleComplete,
+}) => {
   return (
     <div className="flex items-center justify-between bg-white p-4 rounded-lg shadow-sm">
       <div className="flex items-center flex-1">
